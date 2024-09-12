@@ -1,126 +1,18 @@
-.admin-container {
-    display: flex;
-    max-height: 100vh;
-    overflow:hidden;
-  }
-  
-  .sidebar {
-    max-height: 100vh;
-    width: 20%;
-    padding: 10px;
-    background-color: #f0f0f0;
-  }
-  
-  .sidebar button {
-    display: block;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 100%;
-  }
-  
-  .content {
-    width: 80%;
-    padding: 20px;
-  }
+/* homepage.css */
 
-  /* forms styling */
-form {
-  max-width: 600px;
-  max-height: 80vh;
-  margin: 0 auto;
-  padding: 30px;
-  background: linear-gradient(145deg, #2e3135, #3c3f41); /* Soft gradient for depth */
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow for more emphasis */
-  color: #e5e7eb; /* Text color */
-  transition: transform 0.2s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: left;
-}
-
-
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #ffffff;
-  font-size: 28px;
-  background: linear-gradient(90deg, #10a37f, #18b395); /* Gradient text */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: 600;
-  color: #d1d5db;
-  letter-spacing: 0.5px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-input[type="file"],  
-textarea {
-  width: 90%;
-  padding: 14px;
-  margin-bottom: 20px;
-  border: 1px solid #565b61;
-  border-radius: 8px;
-  font-size: 16px;
-  background-color: #2b2e30;
-  color: #e5e7eb;
-  transition: all 0.3s ease;
-}
-
-input:focus,
-textarea:focus {
-  border-color: #10a37f;
-  background-color: #34373a; /* Darker background on focus */
-  outline: none;
-  box-shadow: 0 0 8px rgba(16, 163, 127, 0.6); /* Glowing effect on focus */
-}
-
-textarea {
-  resize: vertical;
-  height: 150px;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  background-color: #10a37f;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-  background: linear-gradient(145deg, #18b395, #10a37f); /* Gradient on hover */
-}
-
-/* Form container styling */
 .admin-container {
   display: flex;
-  justify-content: center;
-  /* padding: 400px; */
-  background-color: #232527;
-}
-
-/* Sidebar styling */
-.sidebar {
-  width: 200px;
-  padding: 20px;
-  background-color: #2d2f31;
-  border-right: 1px solid #565b61;
   height: 100vh;
+  overflow: hidden;
+  background-color: #232527;
+  font-family: 'Arial', sans-serif;
+}
+
+.sidebar {
+  width: 10%;
+  background-color: #2d2f31;
+  padding: 20px;
+  border-right: 1px solid #565b61;
 }
 
 .sidebar button {
@@ -139,22 +31,168 @@ button:hover {
 
 .sidebar button:hover,
 .sidebar button.active {
-  background: linear-gradient(145deg, #10a37f, #18b395); /* Gradient on hover */
+  background: #ffc107;
   color: #ffffff;
-  border-color: #10a37f;
+  border-color: #ffc107;
   transform: translateY(-3px);
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  form {
-    padding: 15px;
-  }
+.content {
+  width:90%;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #232527;
+}
 
-  .sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid #565b61;
-  }
+.merchant-container,
+.onboard-container {
+  background-color: #2d2f31;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-size: 24px;
+  text-align: left;
+}
+
+.search-bar {
+  padding: 12px;
+  border: 1px solid #565b61;
+  border-radius: 8px;
+  width: 300px;
+  font-size: 14px;
+  background-color: #2b2e30;
+  color: #e5e7eb;
+  margin-bottom: 10px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: #ffc107;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #ffca2c;
+}
+
+.new-merchant-btn {
+  padding: 10px 20px;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-merchant-btn:hover {
+  background-color: #ffca2c;
+}
+
+.onboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #2d2f31;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.onboard-table th,
+.onboard-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #3a3a3a;
+  color: #d1d5db;
+}
+
+.onboard-table th {
+  background-color: #333;
+  font-weight: bold;
+}
+
+.onboard-table tr:hover {
+  background-color: #383838;
+}
+
+.onboard-table button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.onboard-table button.approve {
+  background-color: #ffc107;
+  color: white;
+}
+
+.onboard-table button.approve:hover {
+  background-color: #ffca2c;
+}
+
+.onboard-table button.decline {
+  background-color: #ff4c4c;
+  color: white;
+}
+
+.onboard-table button.decline:hover {
+  background-color: #ff6f6f;
+}
+
+/* Form styling */
+.form-container form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #2d2f31;
+  border-radius: 12px;
+  color: #e5e7eb;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #d1d5db;
+}
+
+.form-container input[type="text"],
+.form-container input[type="file"],
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #565b61;
+  border-radius: 8px;
+  background-color: #2b2e30;
+  color: #e5e7eb;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  background-color: #ffc107;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+  background-color: #ffca2c;
 }

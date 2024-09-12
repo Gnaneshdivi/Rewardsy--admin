@@ -1,0 +1,32 @@
+/* CommonTable.css */
+
+.common-table-container {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .common-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2d2f31;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .common-table th,
+  .common-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #3a3a3a;
+    color: #d1d5db;
+  }
+  
+  .common-table th {
+    background-color: #333;
+    font-weight: bold;
+  }
+  
+  .common-table tr:hover {
+    background-color: #383838;
+  }
+  

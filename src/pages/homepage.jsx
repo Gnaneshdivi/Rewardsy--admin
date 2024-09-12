@@ -1,24 +1,34 @@
-import React, { useState } from "react";
-import "./homepage.css";
-import Form from "./on-board"; // Onboarding form component
-import Content from "./content"; // Content form component
-import Offer from "./offers"; // Offer form component
+import React, { useState } from 'react';
+import './homepage.css'; // Importing the CSS for styling
+import Merchant from '../tabs/merchant/Merchant'; // Importing the Merchant component
+import OnBoard from '../tabs/onboard/OnBoard'; // Importing the OnBoard component
 
 const Homepage = () => {
-  const [activeTab, setActiveTab] = useState("onboarding");
+  const [activeTab, setActiveTab] = useState('merchant'); // State to manage the active tab
+
+  const handleTabChange = (tabName) => {
+    setActiveTab(tabName);
+  };
 
   return (
     <div className="admin-container">
       <div className="sidebar">
-        <button onClick={() => setActiveTab("onboarding")}>On-Boarding</button>
-        <button onClick={() => setActiveTab("content")}>Content</button>
-        <button onClick={() => setActiveTab("offers")}>Offers</button>
+        <button
+          className={activeTab === 'merchant' ? 'active' : ''}
+          onClick={() => handleTabChange('merchant')}
+        >
+          Merchant
+        </button>
+        <button
+          className={activeTab === 'onboard' ? 'active' : ''}
+          onClick={() => handleTabChange('onboard')}
+        >
+          On Board
+        </button>
       </div>
-
       <div className="content">
-        {activeTab === "onboarding" && <Form title="On-Boarding Form" />}
-        {activeTab === "content" && <Content title="Content Form" />}
-        {activeTab === "offers" && <Offer title="Offers Form" />}
+        {activeTab === 'merchant' && <Merchant />}
+        {activeTab === 'onboard' && <OnBoard />}
       </div>
     </div>
   );

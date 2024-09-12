@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore'; // Import Firestore
-import { db } from '../firebase'; // Firebase configuration import
-import "./homepage.css";
+import { db } from '../../firebase'; // Firebase configuration import
 
 const Offer = ({ title }) => {
   // State to manage form data

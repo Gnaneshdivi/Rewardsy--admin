@@ -1,0 +1,41 @@
+/* merchant.css */
+
+.merchant-container {
+  background-color: #2d2f31;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-size: 24px;
+  text-align: left;
+}
+
+.search-bar {
+  padding: 12px;
+  border: 1px solid #565b61;
+  border-radius: 8px;
+  width: 300px;
+  font-size: 14px;
+  background-color: #2b2e30;
+  color: #e5e7eb;
+  margin-bottom: 10px;
+}
+
+.search-button {
+    margin: 20px;
+  padding: 10px 20px;
+  background-color: #ffc107;
+  color: #000000;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #ffca2c;
+}
