@@ -1,0 +1,103 @@
+.form-container {
+  width: 100%;
+  max-height: 80vh; /* Set a maximum height to allow for scrolling */
+  margin: 0 auto;
+  overflow-y: auto; /* Allow vertical scrolling */
+  background: #2d2f31;
+  padding: 20px; /* Add padding to provide spacing inside the form */
+  border-radius: 12px;
+  color: #e5e7eb;
+}
+
+.form-container h2 {
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #d1d5db;
+}
+
+.form-container input[type="text"],
+.form-container input[type="date"],
+.form-container input[type="number"],
+.form-container textarea,
+.form-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #565b61;
+  border-radius: 8px;
+  background-color: #2b2e30;
+  color: #e5e7eb;
+}
+
+/* Tag input styling */
+.tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-radius: 8px;
+  padding: 10px;
+}
+.image-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+
+.tag-bubble {
+  display: inline-flex;
+  align-items: center;
+  background-color: #4b5563; /* Gray color for tags */
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  margin: 5px;
+  font-size: 14px;
+}
+
+.tag-remove {
+  margin-left: 8px;
+  color: black;
+  padding: 0 6px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.tag-remove:hover {
+  background-color: #ff6f6f;
+}
+
+.tag-input {
+  flex: 1;
+  min-width: 100px;
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #e5e7eb;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  background-color: #ffc107;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-container button:hover {
+  background-color: #ffca2c;
+}

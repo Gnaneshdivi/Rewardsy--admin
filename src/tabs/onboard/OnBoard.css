@@ -1,13 +1,16 @@
 /* OnBoard.css */
 
+/* Container styling for the OnBoard page */
 .onboard-container {
   background-color: #2d2f31;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   color: #e5e7eb;
+  overflow: hidden; /* Prevent overflow */
 }
 
+/* Header styling for the OnBoard page */
 .onboard-header {
   display: flex;
   justify-content: space-between;
@@ -18,8 +21,10 @@
 .onboard-header h2 {
   font-size: 24px;
   color: #ffffff;
+  margin: 0; /* Reset margin for consistency */
 }
 
+/* New Merchant button styling */
 .new-merchant-btn {
   padding: 10px 20px;
   background-color: #ffc107;
@@ -28,12 +33,14 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-weight: bold; /* Make button text bold */
 }
 
 .new-merchant-btn:hover {
   background-color: #ffca2c;
 }
 
+/* Table styling */
 .onboard-table {
   width: 100%;
   border-collapse: collapse;
@@ -41,6 +48,7 @@
   background-color: #2d2f31;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Adds subtle shadow to the table */
 }
 
 .onboard-table th,
@@ -58,8 +66,10 @@
 
 .onboard-table tr:hover {
   background-color: #383838;
+  transition: background-color 0.3s ease; /* Adds transition for smooth hover effect */
 }
 
+/* Button styling for Approve and Decline */
 .approve-btn,
 .decline-btn {
   padding: 6px 12px;
@@ -69,6 +79,7 @@
   margin-right: 5px;
   font-size: 14px;
   transition: background-color 0.3s ease;
+  font-weight: bold; /* Make button text bold */
 }
 
 .approve-btn {
@@ -87,4 +98,47 @@
 
 .decline-btn:hover {
   background-color: #ff6f6f;
+}
+
+/* Filter container styling */
+.filter-container {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+#status-filter {
+  margin-left: 10px;
+  padding: 5px;
+  font-size: 14px;
+  background-color: #2d2f31;
+  color: #e5e7eb;
+  border: 1px solid #565b61;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+#status-filter:focus {
+  outline: none;
+  border-color: #ffc107;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .onboard-container {
+    padding: 10px;
+  }
+
+  .onboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-container {
+    margin-bottom: 10px;
+  }
+
+  .new-merchant-btn {
+    margin-top: 10px;
+  }
 }

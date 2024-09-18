@@ -1,9 +1,7 @@
-/* MerchantDetails.css */
-
 .admin-container {
   display: flex;
   height: 100vh;
-  overflow: hidden;
+  overflow: hidden; /* Prevent overflow on the main container */
   background-color: #232527;
   font-family: 'Arial', sans-serif;
 }
@@ -17,6 +15,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  overflow-y: auto; /* Allow vertical scrolling in the sidebar */
 }
 
 .merchant-info {
@@ -92,8 +91,9 @@
 .content {
   width: 80%;
   padding: 20px;
-  overflow-y: auto;
+  overflow-y: auto; /* Allow vertical scrolling only */
   background-color: #232527;
+  max-height: 100vh; /* Restrict content height to viewport */
 }
 
 .merchant-banner {
@@ -154,7 +154,8 @@
   border-radius: 8px;
   color: #e5e7eb;
   width: 100%;
-  overflow-y: auto;
+  overflow-y: auto; /* Allow vertical scrolling within the tab content */
+  max-height: calc(100vh - 200px); /* Adjust to prevent overflow */
 }
 
 .form-group {
@@ -181,6 +182,13 @@
   transition: all 0.3s ease;
 }
 
+/* Remove scrollbars in modern browsers */
+.form-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* Optional: just to hide the scrollbar */
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .admin-container {
     flex-direction: column;

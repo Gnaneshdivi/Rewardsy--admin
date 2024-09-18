@@ -1,0 +1,33 @@
+.tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tag-bubble {
+  background-color: #383838;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  position: relative;
+  font-size: 14px;
+}
+
+.tag-remove {
+  margin-left: 8px;
+  color: #ff4c4c;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tag-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #565b61;
+  background-color: #2b2e30;
+  color: #e5e7eb;
+  margin-bottom: 20px;
+}

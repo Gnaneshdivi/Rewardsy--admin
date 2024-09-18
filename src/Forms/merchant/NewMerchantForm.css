@@ -10,6 +10,10 @@
   border-radius: 12px;
   color: #e5e7eb;
 }
+.form-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in Chrome, Safari, and Opera */
+}
+
 .form-container h2{
 align-items: center;
 font-size: 1.5rem;

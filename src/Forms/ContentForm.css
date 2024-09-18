@@ -1,0 +1,65 @@
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #2d2f31;
+  border-radius: 12px;
+  color: #e5e7eb;
+}
+
+.form-container h2 {
+  font-size: 24px;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #d1d5db;
+}
+
+.form-container input[type="text"],
+.form-container input[type="file"],
+.form-container input[type="number"],
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #565b61;
+  border-radius: 8px;
+  background-color: #2b2e30;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.form-container textarea {
+  overflow: hidden;
+  resize: vertical;
+  height: 100px;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #ffc107;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.form-container button:hover {
+  background-color: #ffca2c;
+}
+
+.video-preview video,
+.image-preview img {
+  display: block;
+  margin: 10px auto;
+  border-radius: 8px;
+}

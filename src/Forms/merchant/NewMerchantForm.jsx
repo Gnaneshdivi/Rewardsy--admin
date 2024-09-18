@@ -10,8 +10,6 @@ const NewMerchantForm = ({ onBack }) => {
     images: '',
     description: '',
     socialMediaLinks: '',
-    description: '',
-    socialMediaLinks: '',
     file: null,
   });
 

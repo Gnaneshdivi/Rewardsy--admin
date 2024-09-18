@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './MerchantDetails.css'; // Importing the CSS for styling
+import Offers from '../../tabs/offers/offers';
+import Content from '../../tabs/content/content';
 
 const MerchantDetails = () => {
   const [activeTab, setActiveTab] = useState('details'); // Set initial active tab to 'details'
@@ -167,8 +169,8 @@ const MerchantDetails = () => {
             </div>
           </>
         )}
-        {activeTab === 'offers' && <div>Manage Offers Content</div>}
-        {activeTab === 'content' && <div>Manage Content</div>}
+        {activeTab === 'offers' && <Offers/>}
+        {activeTab === 'content' && <Content/>}
         {activeTab === 'qr' && <div>Manage QR Codes</div>}
       </div>
     </div>
