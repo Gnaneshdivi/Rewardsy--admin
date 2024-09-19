@@ -1,82 +1,103 @@
-import React, { useState } from 'react';
-import { collection, addDoc } from 'firebase/firestore'; // Import Firestore
-import { db } from '../../firebase'; // Firebase configuration import
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './QRCodes.css'; // Import the CSS for styling
+import QRCode from 'react-qr-code';
+import QRForm from '../../Forms/QrForm'; // Import the QRForm component
 
-const Qr = ({ title }) => {
-  // State to manage QR data
-  const [qrData, setQrData] = useState({
-    storeId: '',
-    qrType: '', // Example field for the type of QR code (e.g., static, dynamic)
-    qrDescription: '',
-    qrLink: '', // Field for the link or data the QR code should point to
-  });
+const QRCodes = () => {
+  const [qrCodes, setQRCodes] = useState([]);
+  const [filteredQRCodes, setFilteredQRCodes] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search
+  const [isCreatingNewQR, setIsCreatingNewQR] = useState(false); // Toggle between grid and form
+  const navigate = useNavigate();
 
-  // Handle form input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setQrData((prev) => ({ ...prev, [name]: value }));
+  useEffect(() => {
+    // Fetch QR codes from your backend API (dummy data for now)
+    const fetchedQRCodes = [
+      {
+        id: '1',
+        name: 'QR Code 1',
+        active: true,
+        ads: true,
+        ads_link: 'https://images.unsplash.com/photo-1724685010983',
+      },
+      {
+        id: '2',
+        name: 'QR Code 2',
+        active: true,
+        ads: false,
+        ads_link: '',
+      },
+    ];
+    setQRCodes(fetchedQRCodes);
+    setFilteredQRCodes(fetchedQRCodes); // Set initial filtered QR codes
+  }, []);
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    filterQRCodes(query);
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // Add QR data to Firestore collection "qrs" (adjust the collection name as needed)
-      await addDoc(collection(db, 'qrs'), qrData);
-      alert('QR data submitted successfully');
-    } catch (err) {
-      console.error('Error submitting QR data:', err);
-      alert('Error submitting QR data');
+  const filterQRCodes = (query) => {
+    let updatedQRCodes = [...qrCodes];
+
+    // Filter by search query
+    if (query) {
+      updatedQRCodes = updatedQRCodes.filter((qr) =>
+        qr.name.toLowerCase().includes(query.toLowerCase())
+      );
     }
+
+    setFilteredQRCodes(updatedQRCodes);
+  };
+
+  const handleQRClick = (id) => {
+    navigate(`/qr/${id}`); // Navigate to the QR-specific page
+  };
+
+  const handleNewQR = () => {
+    {!isCreatingNewQR ? 'New QR' : 'Back'}
+    setIsCreatingNewQR(!isCreatingNewQR ? true : false); // Switch to the form
   };
 
   return (
-    <div>
-      <h2>{title}</h2>
-      <form onSubmit={handleSubmit}>
-        <label>Store ID:</label>
-        <input
-          type="text"
-          name="storeId"
-          placeholder="Store ID"
-          value={qrData.storeId}
-          onChange={handleInputChange}
-          required
-        />
+    <div className="qr-codes-container">
+      <div className="qr-codes-header">
+        <h2>QR Codes</h2>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search by QR Name"
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+        </div>
+        <button className="new-qr-btn" onClick={handleNewQR}>
+          
+          {!isCreatingNewQR ? 'New QR' : 'Back'}
+        </button>
+      </div>
 
-        <label>QR Type:</label>
-        <input
-          type="text"
-          name="qrType"
-          placeholder="QR Type (e.g., static, dynamic)"
-          value={qrData.qrType}
-          onChange={handleInputChange}
-          required
-        />
-
-        <label>QR Description:</label>
-        <textarea
-          name="qrDescription"
-          placeholder="Description"
-          value={qrData.qrDescription}
-          onChange={handleInputChange}
-          required
-        />
-
-        <label>Link or Data for QR Code:</label>
-        <input
-          type="text"
-          name="qrLink"
-          placeholder="Link or data for the QR code"
-          value={qrData.qrLink}
-          onChange={handleInputChange}
-          required
-        />
-
-        <button type="submit">Submit</button>
-      </form>
+      {!isCreatingNewQR ? (
+        <div className="qr-grid">
+          {filteredQRCodes.map((qr) => (
+            <div key={qr.id} className="qr-card" onClick={() => handleQRClick(qr.id)}>
+              <QRCode
+                size={256}
+                style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                value={`https://app.rewardsy.one/qr/${qr.id}`}
+                viewBox={`0 0 256 256`}
+              />
+              <p>{qr.name}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <QRForm />
+      )}
     </div>
   );
 };
 
-export default Qr;
+export default QRCodes;

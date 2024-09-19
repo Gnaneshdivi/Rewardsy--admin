@@ -1,0 +1,75 @@
+.qr-details-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #232527;
+    padding: 20px;
+  }
+  
+  .qr-form-background {
+    background-color: #2d2f31;
+    color: #e5e7eb;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    max-height: 90vh; /* Ensures scrollable content without overflow */
+  }
+  
+  .qr-preview {
+    margin-bottom: 20px;
+    display: flex;
+    max-width: 20%;
+    max-height: 20%;
+    justify-content: center;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #d1d5db;
+  }
+  
+  input,
+  select {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #565b61;
+    background-color: #2b2e30;
+    color: #e5e7eb;
+  }
+  
+  button {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ffca2c;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .qr-details-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+  }
+  

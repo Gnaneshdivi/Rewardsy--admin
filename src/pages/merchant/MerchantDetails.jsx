@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './MerchantDetails.css'; // Importing the CSS for styling
 import Offers from '../../tabs/offers/offers';
 import Content from '../../tabs/content/content';
+import QRCodes from '../../tabs/qr/Qr';
 
 const MerchantDetails = () => {
   const [activeTab, setActiveTab] = useState('details'); // Set initial active tab to 'details'
@@ -171,7 +172,7 @@ const MerchantDetails = () => {
         )}
         {activeTab === 'offers' && <Offers/>}
         {activeTab === 'content' && <Content/>}
-        {activeTab === 'qr' && <div>Manage QR Codes</div>}
+        {activeTab === 'qr' && <QRCodes/>}
       </div>
     </div>
   );

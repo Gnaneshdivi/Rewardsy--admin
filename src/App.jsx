@@ -4,6 +4,7 @@ import Homepage from './pages/homepage'; // Main dashboard component
 import MerchantDetails from './pages/merchant/MerchantDetails'; // New component for merchant details
 import OfferDetails from './pages/Offers/OfferDetails'
 import ReelDetails from './pages/Reel/ReelDetails';
+import QRDetails from './pages/QR/QRDetails';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/merchant/:merchantId" element={<MerchantDetails />} />
         <Route path="/offer/:id" element={<OfferDetails />} />
         <Route path="/reel/:id" element={<ReelDetails />} />
+        <Route path="/qr/:id" element={<QRDetails />} />
       </Routes>
   );
 }
