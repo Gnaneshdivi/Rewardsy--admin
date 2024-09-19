@@ -5,14 +5,26 @@ import OnBoard from '../tabs/onboard/OnBoard'; // Importing the OnBoard componen
 
 const Homepage = () => {
   const [activeTab, setActiveTab] = useState('merchant'); // State to manage the active tab
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // State for hamburger menu
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
+    setIsSidebarVisible(false); // Close sidebar when a tab is selected
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
   };
 
   return (
     <div className="admin-container">
-      <div className="sidebar">
+      <div className="hamburger" onClick={toggleSidebar}>
+        <div className="bar"></div>
+        <div className="bar"></div>
+        <div className="bar"></div>
+      </div>
+
+      <div className={`sidebar ${isSidebarVisible ? 'visible' : ''}`}>
         <button
           className={activeTab === 'merchant' ? 'active' : ''}
           onClick={() => handleTabChange('merchant')}
@@ -26,6 +38,7 @@ const Homepage = () => {
           On Board
         </button>
       </div>
+      
       <div className="content">
         {activeTab === 'merchant' && <Merchant />}
         {activeTab === 'onboard' && <OnBoard />}

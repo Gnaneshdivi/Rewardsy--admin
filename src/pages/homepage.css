@@ -1,20 +1,22 @@
-/* homepage.css */
-
+/* General Layout */
 .admin-container {
   display: flex;
   height: 100vh;
   overflow: hidden;
   background-color: #232527;
   font-family: 'Arial', sans-serif;
+  position: relative;
 }
 
+/* Sidebar: Initially visible for large screens */
 .sidebar {
-  width: 10%;
+  max-width: 10%;
   background-color: #2d2f31;
   padding: 20px;
   border-right: 1px solid #565b61;
 }
 
+/* Sidebar button styling */
 .sidebar button {
   display: block;
   width: 100%;
@@ -26,7 +28,6 @@
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .sidebar button:hover,
@@ -34,165 +35,69 @@
   background: #ffc107;
   color: #ffffff;
   border-color: #ffc107;
-  transform: translateY(-3px);
 }
 
+/* Content area */
 .content {
-  width:90%;
+  width: 85%;
   padding: 20px;
   overflow-y: auto;
   background-color: #232527;
 }
 
-.merchant-container,
-.onboard-container {
-  background-color: #2d2f31;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  margin-bottom: 20px;
-  color: #ffffff;
-  font-size: 24px;
-  text-align: left;
-}
-
-.search-bar {
-  padding: 12px;
-  border: 1px solid #565b61;
-  border-radius: 8px;
-  width: 300px;
-  font-size: 14px;
-  background-color: #2b2e30;
-  color: #e5e7eb;
-  margin-bottom: 10px;
-}
-
-.search-button {
-  padding: 10px 20px;
-  background-color: #ffc107;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.search-button:hover {
-  background-color: #ffca2c;
-}
-
-.new-merchant-btn {
-  padding: 10px 20px;
-  background-color: #ffc107;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.new-merchant-btn:hover {
-  background-color: #ffca2c;
-}
-
-.onboard-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: #2d2f31;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.onboard-table th,
-.onboard-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #3a3a3a;
-  color: #d1d5db;
-}
-
-.onboard-table th {
-  background-color: #333;
-  font-weight: bold;
-}
-
-.onboard-table tr:hover {
-  background-color: #383838;
-}
-
-.onboard-table button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 5px;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-.onboard-table button.approve {
-  background-color: #ffc107;
-  color: white;
-}
-
-.onboard-table button.approve:hover {
-  background-color: #ffca2c;
-}
-
-.onboard-table button.decline {
-  background-color: #ff4c4c;
-  color: white;
-}
-
-.onboard-table button.decline:hover {
-  background-color: #ff6f6f;
-}
-
-/* Form styling */
-.form-container form {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background: #2d2f31;
-  border-radius: 12px;
-  color: #e5e7eb;
-}
-
-.form-container label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: 600;
-  color: #d1d5db;
-}
-
-.form-container input[type="text"],
-.form-container input[type="file"],
-.form-container textarea {
-  width: 100%;
+/* Hamburger Menu: Hidden on larger screens */
+.hamburger {
   padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #565b61;
-  border-radius: 8px;
-  background-color: #2b2e30;
-  color: #e5e7eb;
-}
-
-.form-container button {
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  background-color: #ffc107;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
+  display: none;
+  top: 15px;
+  left: 15px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  z-index: 1001;
 }
 
-.form-container button:hover {
-  background-color: #ffca2c;
+.hamburger .bar {
+  width: 30px;
+  height: 3px;
+  background-color: #fff;
+  margin: 5px 0;
+  transition: all 0.3s ease;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  /* Hide sidebar by default on smaller screens */
+  .sidebar {
+    max-width: 40%;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #2d2f31;
+    z-index: 1002;
+    border-right: 1px solid #565b61;
+    transform: translateX(-100%);
+    transition: transform 0.1s ease-in-out;
+  }
+
+  /* Sidebar becomes visible when toggled */
+  .sidebar.visible {
+    transform: translateX(0);
+  }
+
+  /* Content area fills the screen when sidebar is hidden */
+  .content {
+    max-width: 96%;
+    padding: 5px;
+    overflow-y: auto;
+  }
+
+  /* Show hamburger on mobile */
+  .hamburger {
+    display: block;
+  }
+
+  /* Change hamburger bar color to match the theme */
+  .hamburger .bar {
+    background-color: #ffc107;
+  }
 }
