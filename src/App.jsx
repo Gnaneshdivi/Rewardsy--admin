@@ -6,6 +6,8 @@ import OfferDetails from './pages/Offers/OfferDetails'
 import ReelDetails from './pages/Reel/ReelDetails';
 import QRDetails from './pages/QR/QRDetails';
 
+
+
 function App() {
   return (
       <Routes>

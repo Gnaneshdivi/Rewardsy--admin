@@ -11,7 +11,7 @@ export const getBaseURL = () => {
   ) => {
     try {
       const baseURL = getBaseURL(); // Get base URL from environment variables
-      const url = `${baseURL}${endpoint}`; // Combine base URL with the endpoint
+      const url = `${endpoint}`; // Combine base URL with the endpoint
   
       const headers = {
         'Content-Type': 'application/json',

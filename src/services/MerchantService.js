@@ -1,4 +1,4 @@
-import { APICallHandler, getBaseURL } from '..APIServices';
+import { APICallHandler, getBaseURL } from './APIServices';
 
 class MerchantService {
   constructor() {
@@ -29,11 +29,15 @@ class MerchantService {
     }
   }
 
-  // Change merchant status (Approve, Block, Decline)
+  // Change merchant status and update active flag (Approve, Block, Decline)
   async changeMerchantStatus(merchantId, status) {
     try {
       const url = `${this.baseURL}/${merchantId}`;
-      const statusBody = { status };
+
+      // Set active based on status
+      const active = status === 'active';
+
+      const statusBody = { status, active };
       const response = await APICallHandler(url, 'PUT', undefined, {}, statusBody);
       return response;
     } catch (error) {
