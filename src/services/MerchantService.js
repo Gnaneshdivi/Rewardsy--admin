@@ -69,6 +69,18 @@ class MerchantService {
       throw error;
     }
   }
+
+  // Get store by ID (GET request)
+  async getStoreById(storeId) {
+    try {
+      const url = `${this.baseURL}/${storeId}`;
+      const response = await APICallHandler(url, 'GET', undefined, {});
+      return response;
+    } catch (error) {
+      console.error(`Error fetching store with ID ${storeId}:`, error.message);
+      throw error;
+    }
+  }
 }
 
 export const merchantService = new MerchantService();
