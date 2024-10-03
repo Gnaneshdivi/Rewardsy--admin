@@ -1,69 +1,78 @@
 .content-container {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background-color: #232527;
-    color: #e5e7eb;
-  }
-  
-  .content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .search-container input {
-    padding: 10px;
-    border: 1px solid #565b61;
-    border-radius: 8px;
-    background-color: #2b2e30;
-    color: #e5e7eb;
-  }
-  
-  .new-reel-btn,
-  .back-btn {
-    padding: 10px 20px;
-    background-color: #ffc107;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .new-reel-btn:hover,
-  .back-btn:hover {
-    background-color: #ffca2c;
-  }
-  
-  .reel-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .reel-card {
-    width: 200px;
-    background-color: #2d2f31;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  
-  .reel-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .reel-card img {
-    width: 100%;
-    border-radius: 8px;
-  }
-  
-  .reel-card p {
-    margin-top: 10px;
-    text-align: center;
-    color: #ffc107;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #232527;
+  color: #e5e7eb;
+  height: 90vh; /* Full height for the entire container */
+  box-sizing: border-box;
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* Add spacing below the header */
+}
+
+.search-container input {
+  padding: 10px;
+  border: 1px solid #565b61;
+  border-radius: 8px;
+  background-color: #2b2e30;
+  color: #e5e7eb;
+}
+.reel-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.new-reel-btn,
+.back-btn {
+  padding: 10px 20px;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-reel-btn:hover,
+.back-btn:hover {
+  background-color: #ffca2c;
+}
+
+/* Set the height of the reel-grid and allow it to scroll */
+.reel-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  height: calc(100vh - 160px); /* Adjust height based on header and padding */
+  padding-right: 10px; /* Add padding for smooth scroll */
+  margin: 0; /* Remove margin */
+}
+
+.reel-card {
+  width: 200px;
+  background-color: #2d2f31;
+  padding: 1px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+
+
+.reel-card img {
+  width: 100%;
+  height: 100%; /* Adjust the height based on your preference */
+  border-radius: 8px;
+  object-fit: cover; /* Ensure the image covers the card without distortion */
+}
+
+.reel-card p {
+  margin-top: 10px;
+  text-align: center;
+  color: #ffc107;
+}

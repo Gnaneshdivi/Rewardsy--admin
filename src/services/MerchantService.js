@@ -21,7 +21,8 @@ class MerchantService {
   async updateMerchant(merchantId, merchantData) {
     try {
       const url = `${this.baseURL}/${merchantId}`;
-      const response = await APICallHandler(url, 'PUT', undefined, {}, merchantData);
+      const { id, ...merchantDataWithoutId } = merchantData;
+      const response = await APICallHandler(url, 'PUT', undefined, {}, merchantDataWithoutId);
       return response;
     } catch (error) {
       console.error('Error updating merchant:', error.message);
@@ -66,6 +67,18 @@ class MerchantService {
       return response;
     } catch (error) {
       console.error('Error fetching merchant by location:', error.message);
+      throw error;
+    }
+  }
+
+  // Get store by ID (GET request)
+  async getStoreById(storeId) {
+    try {
+      const url = `${this.baseURL}/admin/${storeId}`;
+      const response = await APICallHandler(url, 'GET', undefined, {});
+      return response;
+    } catch (error) {
+      console.error(`Error fetching store with ID ${storeId}:`, error.message);
       throw error;
     }
   }

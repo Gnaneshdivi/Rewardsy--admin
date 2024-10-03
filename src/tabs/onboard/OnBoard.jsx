@@ -97,7 +97,7 @@ const OnBoard = () => {
   };
 
   const handleRowClick = (id) => {
-    navigate(`/store/${id}`);
+    navigate(`/merchant/${id}`);
   };
 
   return (
@@ -155,7 +155,7 @@ const OnBoard = () => {
                 ) : null,
             },
           ]}
-          onRowClick={handleRowClick} // Add this prop to handle row click
+          onRowClick={(item) => handleRowClick(item.id)} // Add this prop to handle row click
         />
       )}
     </div>

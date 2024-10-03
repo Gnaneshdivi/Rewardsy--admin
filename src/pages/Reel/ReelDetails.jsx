@@ -1,36 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ReelDetails.css'; // Import the CSS for styling
+import { contentService } from '../../services/ContentService'; // Import contentService
+import StorageService, { FILE_TYPES } from '../../services/StorageService'; // Import Firebase storage service
 
-const OfferDetails = () => {
-  const { id } = useParams(); // Get the content ID from the URL parameters
+const ReelDetails = () => {
+  const { id } = useParams(); // Get the reel ID from the URL parameters
   const navigate = useNavigate();
-
-  // Simulated fetched content data (mock data)
-  const dummyData = {
-    1: {
-      description: 'Best orange fruit juice in town',
-      interactions: 0,
-      link: 'https://firebasestorage.googleapis.com/v0/b/rewardsy-app.appspot.com/o/Store1_Reel3.mp4?alt=media&token=f1c2fd82-a414-474b-8d1c-c5af3b8ecd76',
-      store: 'HrEUV9JfzXkcDrpWaOhM',
-      tags: ['Juice', 'Drink'],
-      url: 'https://picsum.photos/200/300?random=3'
-    },
-    // Add more dummy content if needed
-  };
-
+  
   const [contentData, setContentData] = useState(null); // Store the content data
+  const [originalContentData, setOriginalContentData] = useState(null); // Store original data to compare changes
   const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
   const [tagInput, setTagInput] = useState(''); // For tag input
-
+  const [loading, setLoading] = useState(true); // For loading spinner
+  const [newImageFile, setNewImageFile] = useState(null); // Track new image upload
+  
   // Fetch the content data based on the ID
   useEffect(() => {
-    const fetchedContent = dummyData[id];
-    if (fetchedContent) {
-      setContentData(fetchedContent);
-    } else {
-      console.error('Content not found');
-    }
+    const fetchContent = async () => {
+      try {
+        const fetchedContent = await contentService.getContentById(id);
+        setContentData(fetchedContent); // Load the data into state
+        setOriginalContentData(fetchedContent); // Save original data for comparison
+      } catch (error) {
+        console.error('Error fetching content:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchContent();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -63,18 +61,61 @@ const OfferDetails = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    console.log('Content data saved:', contentData); // Simulate saving the data
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewImageFile(file); // Save new image file for upload
+      const newImageURL = URL.createObjectURL(file); // Preview the image
+      setContentData((prev) => ({ ...prev, url: newImageURL }));
+    }
   };
 
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+
+      const updatedData = {};
+      
+      // Compare contentData with originalContentData and only include changed fields
+      if (contentData.description !== originalContentData.description) {
+        updatedData.description = contentData.description;
+      }
+      if (contentData.tags !== originalContentData.tags) {
+        updatedData.tags = contentData.tags;
+      }
+
+      // Check if a new image was uploaded
+      if (newImageFile) {
+        // Upload the new image to Firebase
+        const imageUrl = await StorageService.uploadFileToStorage(newImageFile, FILE_TYPES.CONTENT);
+        updatedData.url = imageUrl; // Add the new image URL to update payload
+      }
+
+      // Call API to update if any changes exist
+      if (Object.keys(updatedData).length > 0) {
+        await contentService.updateContent(id, updatedData); // Call API to update
+      }
+
+      setIsEditing(false);
+      console.log('Content data updated:', contentData);
+    } catch (error) {
+      console.error('Error updating content:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <p>Loading content details...</p>; // Show a loading message while fetching
+  }
+
   if (!contentData) {
-    return <p>Loading Content details...</p>; // Show a loading message while fetching
+    return <p>Content not found</p>; // If no content data is found
   }
 
   return (
-    <div className="offer-details-container">
-      <div className="offer-form-background">
+    <div className="content-details-container">
+      <div className="content-form-background">
         <h2>Content Details</h2>
 
         {/* Video Player */}
@@ -102,15 +143,6 @@ const OfferDetails = () => {
             disabled
           />
 
-          <label>Store ID:</label>
-          <input
-            type="text"
-            name="store"
-            value={contentData.store}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-          />
-
           <label>Content Image:</label>
           <div className="image-preview">
             <img src={contentData.url} alt="Content" />
@@ -118,12 +150,7 @@ const OfferDetails = () => {
           {isEditing && (
             <input
               type="file"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  const newImageURL = URL.createObjectURL(e.target.files[0]);
-                  setContentData((prev) => ({ ...prev, url: newImageURL }));
-                }
-              }}
+              onChange={handleImageChange}
               accept="image/*"
             />
           )}
@@ -172,4 +199,4 @@ const OfferDetails = () => {
   );
 };
 
-export default OfferDetails;
+export default ReelDetails;

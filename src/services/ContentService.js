@@ -2,7 +2,7 @@ import { APICallHandler, getBaseURL } from './APIServices';
 
 class ContentService {
   constructor() {
-    this.baseURL = `${getBaseURL()}/content`;
+    this.baseURL = `${getBaseURL()}/reels`;
   }
 
   // Get all content by store ID (GET request)

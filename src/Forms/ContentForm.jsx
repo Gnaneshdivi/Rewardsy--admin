@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import './ContentForm.css'; // Import CSS for styling
 import TagInput from '../Components/tags/TagInput'; // Import the reusable TagInput component
+import { contentService } from '../services/ContentService'; // Import contentService
+import StorageService, { FILE_TYPES } from '../services/StorageService'; // Firebase Storage Service
 
-const ContentForm = ({ onBack }) => {
+const ContentForm = ({ onBack, storeId, onReelAdded }) => {
   const [formData, setFormData] = useState({
     description: '',
-    interactions: 0,
-    link: '',
-    store: '',
-    tags: [], // Ensure tags is initialized as an empty array
-    url: '',
+    store: storeId, // Store ID passed as a prop
+    tags: [], // Initialize tags as an empty array
   });
   const [videoFile, setVideoFile] = useState(null); // For video upload
   const [imageFile, setImageFile] = useState(null); // For image upload
   const [videoPreview, setVideoPreview] = useState(''); // For video preview
   const [imagePreview, setImagePreview] = useState(''); // For image preview
+  const [isLoading, setIsLoading] = useState(false); // For loading spinner
 
+  // Handle input changes for description and other text inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle video file input and generate a preview URL
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -29,6 +31,7 @@ const ContentForm = ({ onBack }) => {
     }
   };
 
+  // Handle image file input and generate a preview URL
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -37,21 +40,51 @@ const ContentForm = ({ onBack }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission and upload files to Firebase Storage
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Content Form submitted:', formData, videoFile, imageFile);
-    // Handle form submission logic here
+    setIsLoading(true);
+
+    try {
+      let videoUrl = '';
+      let imageUrl = '';
+
+      // Upload video file if provided
+      if (videoFile) {
+        videoUrl = await StorageService.uploadFileToStorage(videoFile, FILE_TYPES.CONTENT); // Get Firebase URL for the video
+      }
+
+      // Upload image file if provided
+      if (imageFile) {
+        imageUrl = await StorageService.uploadFileToStorage(imageFile, FILE_TYPES.CONTENT); // Get Firebase URL for the image
+      }
+
+      // Prepare content data with Firebase URLs
+      const contentData = {
+        ...formData,
+        link: videoUrl, // Firebase video URL
+        url: imageUrl, // Firebase image URL
+      };
+
+      // Send content data to backend
+      const newReel = await contentService.createContent(contentData);
+
+      // Notify the parent component about the new reel
+      onReelAdded(newReel);
+
+      onBack(); // Navigate back after creation
+    } catch (error) {
+      console.error('Error creating content:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  // Clean up preview URLs when component unmounts to prevent memory leaks
   useEffect(() => {
-    // Clean up URLs when component unmounts to prevent memory leaks
     return () => {
-      if (videoPreview) {
-        URL.revokeObjectURL(videoPreview);
-      }
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
+      if (videoPreview) URL.revokeObjectURL(videoPreview);
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [videoPreview, imagePreview]);
 
@@ -68,13 +101,10 @@ const ContentForm = ({ onBack }) => {
           required
         />
 
-       
-        {/* Tags Section using reusable TagInput component */}
+        {/* Tags Section */}
         <TagInput
           tags={formData.tags}
-          setTags={(newTags) =>
-            setFormData((prev) => ({ ...prev, tags: newTags }))
-          }
+          setTags={(newTags) => setFormData((prev) => ({ ...prev, tags: newTags }))}
         />
 
         {/* Video Upload */}
@@ -98,7 +128,9 @@ const ContentForm = ({ onBack }) => {
           </div>
         )}
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Submitting...' : 'Submit'}
+        </button>
       </form>
     </div>
   );
