@@ -3,37 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import ContentForm from '../../Forms/ContentForm'; // Import the form component for new reels
 import './Content.css'; // Import the CSS for styling
 
-const Content = () => {
-  const [content, setContent] = useState([]);
-  const [filteredContent, setFilteredContent] = useState([]);
+const Content = ({ content, id }) => {
+  const [filteredContent, setFilteredContent] = useState(content || []); // Initialize with the passed content data
   const [searchQuery, setSearchQuery] = useState(''); // State for search
   const [isAddingNewReel, setIsAddingNewReel] = useState(false); // Toggle form for new reel
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch reels content from your backend API (dummy data for now)
-    const fetchedContent = [
-      {
-        id: '1',
-        title: 'Reel 1',
-        description: 'Best orange fruit juice in town',
-        link: 'https://firebasestorage.googleapis.com/v0/b/rewardsy-app.appspot.com/o/Store1_Reel3.mp4?alt=media&token=f1c2fd82-a414-474b-8d1e-c5af3b8ecd76',
-        store: 'HrEUV9JfzXkcDrpWaOhM',
-        url: 'https://picsum.photos/200/300?random=3',
-      },
-      {
-        id: '2',
-        title: 'Reel 2',
-        description: 'Beautiful beach view',
-        link: 'https://firebasestorage.googleapis.com/v0/b/rewardsy-app.appspot.com/o/Store2_Reel3.mp4',
-        store: 'J3fRV9EfzZkcDrtPaJpX',
-        url: 'https://picsum.photos/200/300?random=4',
-      },
-      // More dummy content reels
-    ];
-    setContent(fetchedContent);
-    setFilteredContent(fetchedContent); // Set initial filtered content
-  }, []);
+    // Set initial filtered content when the component mounts or content changes
+    setFilteredContent(content);
+  }, [content]);
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -62,6 +41,12 @@ const Content = () => {
     setIsAddingNewReel(!isAddingNewReel); // Toggle between form and grid
   };
 
+  const handleNewReelAdded = (newReel) => {
+    // Add the new reel to the list and update the filtered content
+    setFilteredContent((prevContent) => [...prevContent, newReel]);
+    setIsAddingNewReel(false); // Go back to the grid view
+  };
+
   return (
     <div className="content-container">
       <div className="content-header">
@@ -88,7 +73,7 @@ const Content = () => {
       </div>
 
       {isAddingNewReel ? (
-        <ContentForm onBack={handleNewReel} />
+        <ContentForm onBack={handleNewReel} storeId={id} onReelAdded={handleNewReelAdded} />
       ) : (
         <div className="reel-grid">
           {filteredContent.map((reel) => (

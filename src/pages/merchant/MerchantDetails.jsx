@@ -4,7 +4,9 @@ import Offers from '../../tabs/offers/offers';
 import Content from '../../tabs/content/content';
 import QRCodes from '../../tabs/qr/Qr';
 import { merchantService } from '../../services/MerchantService'; // Assuming the service is set up
+import StorageService, { FILE_TYPES } from '../../services/StorageService'; // Import Firebase Storage service
 import { useParams } from 'react-router-dom'; // To get store ID from URL
+import Spinner from '../../Components/Spinner';
 
 const MerchantDetails = () => {
   const { storeId } = useParams(); // Get store ID from URL params
@@ -14,12 +16,18 @@ const MerchantDetails = () => {
   const [merchantData, setMerchantData] = useState(null); // State for merchant data
   const [offers, setOffers] = useState([]);
   const [content, setContent] = useState([]);
+  const [newBannerFile, setNewBannerFile] = useState(null); // Track if new banner file is selected
+  const [newDpFile, setNewDpFile] = useState(null); // Track if new dp file is selected
+  const [previewBanner, setPreviewBanner] = useState(null); // For banner preview
+  const [previewDp, setPreviewDp] = useState(null); // For DP preview
+  const [originalMerchantData, setOriginalMerchantData] = useState(null); // To store original merchant data
 
   useEffect(() => {
     const fetchStoreDetails = async () => {
       try {
         const response = await merchantService.getStoreById(storeId); // Assuming this API call is available
         setMerchantData(response.store);
+        setOriginalMerchantData(response.store);
         setOffers(response.offers);
         setContent(response.content);
       } catch (error) {
@@ -35,12 +43,13 @@ const MerchantDetails = () => {
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
   };
+
   const updateMerchantStatus = (id, newStatus, isActive = false) => {
     setMerchantData((prevData) =>
       prevData.id === id ? { ...prevData, status: newStatus, active: isActive } : prevData
     );
   };
-  
+
   const handleApprove = async (id) => {
     try {
       await merchantService.changeMerchantStatus(id, 'active');
@@ -86,22 +95,74 @@ const MerchantDetails = () => {
     setMerchantData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleBannerChange = (e) => {
+    const file = e.target.files[0];
+    setNewBannerFile(file); // Track new banner file
+    setPreviewBanner(URL.createObjectURL(file)); // Show banner preview
+  };
+
+  const handleDpChange = (e) => {
+    const file = e.target.files[0];
+    setNewDpFile(file); // Track new dp file
+    setPreviewDp(URL.createObjectURL(file)); // Show dp preview
+  };
+
   const handleEditToggle = () => {
     setIsEditing(!isEditing); // Toggle the edit state
   };
 
   const handleSaveChanges = async () => {
     try {
-      await merchantService.updateMerchant(merchantData.id, merchantData);
+      setLoading(true); // Show loading while saving changes
+      let updatedData = {};
+
+      // Compare and add only the fields that have changed to the updatedData object
+      if (merchantData.name !== originalMerchantData.name) {
+        updatedData.name = merchantData.name;
+      }
+      if (merchantData.area !== originalMerchantData.area) {
+        updatedData.area = merchantData.area;
+      }
+      if (merchantData.desc !== originalMerchantData.desc) {
+        updatedData.desc = merchantData.desc;
+      }
+      if (merchantData.phoneNumber !== originalMerchantData.phoneNumber) {
+        updatedData.phoneNumber = merchantData.phoneNumber;
+      }
+      if (merchantData.location !== originalMerchantData.location) {
+        updatedData.location = merchantData.location;
+      }
+
+      // Upload new banner if selected
+      if (newBannerFile) {
+        const bannerUrl = await StorageService.uploadFileToStorage(newBannerFile, FILE_TYPES.BANNER);
+        updatedData.background = bannerUrl; // Update banner URL
+      }
+
+      // Upload new dp if selected
+      if (newDpFile) {
+        const dpUrl = await StorageService.uploadFileToStorage(newDpFile, FILE_TYPES.DP);
+        updatedData.dp = dpUrl; // Update dp URL
+      }
+
+      // Send the updated data to the server
+      await merchantService.updateMerchant(merchantData.id, updatedData);
+
+      // Update local state after successful save
+      setMerchantData((prevData) => ({ ...prevData, ...updatedData }));
+      setOriginalMerchantData({ ...merchantData, ...updatedData }); // Update the original data to the new values
       setIsEditing(false); // Exit edit mode
-      console.log('Saving changes...', merchantData); // Placeholder for actual save logic
+      console.log('Changes saved', updatedData); // Log or show confirmation message
     } catch (error) {
       console.error('Error saving merchant details:', error.message);
+      alert('Failed to save changes. Please try again.'); // Show failure alert
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Display a loading spinner or message
+    return <Spinner/>; // Display a loading spinner or message
   }
 
   return (
@@ -110,28 +171,27 @@ const MerchantDetails = () => {
         <div className="merchant-info">
           <h2>Merchant: {merchantData.name}</h2>
           <p>Status: {merchantData.status}</p>
-          
-            <div className="action-buttons">
-             { merchantData.status.toLowerCase() === 'under review' ? (
-                  <>
-                    <button className="approve-btn" onClick={() => handleApprove(merchantData.id)}>
-                      Approve
-                    </button>
-                    <button className="decline-btn" onClick={() => handleDecline(merchantData.id)}>
-                      Decline
-                    </button>
-                  </>
-                ) : merchantData.status.toLowerCase() === 'active' ? (
-                  <button className="decline-btn" onClick={() => handleDeactivate(merchantData.id)}>
-                    Deactivate
-                  </button>
-                ) : (merchantData.status.toLowerCase() === 'deactivated' || merchantData.status.toLowerCase() === 'rejected') ? (
-                  <button className="approve-btn" onClick={() => handleReactivate(merchantData.id)}>
-                    Reactivate
-                  </button>
-                ) : null}
-            </div>
-          
+
+          <div className="action-buttons">
+            {merchantData.status.toLowerCase() === 'under review' ? (
+              <>
+                <button className="approve-btn" onClick={() => handleApprove(merchantData.id)}>
+                  Approve
+                </button>
+                <button className="decline-btn" onClick={() => handleDecline(merchantData.id)}>
+                  Decline
+                </button>
+              </>
+            ) : merchantData.status.toLowerCase() === 'active' ? (
+              <button className="decline-btn" onClick={() => handleDeactivate(merchantData.id)}>
+                Deactivate
+              </button>
+            ) : merchantData.status.toLowerCase() === 'deactivated' || merchantData.status.toLowerCase() === 'rejected' ? (
+              <button className="approve-btn" onClick={() => handleReactivate(merchantData.id)}>
+                Reactivate
+              </button>
+            ) : null}
+          </div>
         </div>
         <button
           className={`sidebar-btn ${activeTab === 'details' ? 'active' : ''}`}
@@ -163,36 +223,26 @@ const MerchantDetails = () => {
         {activeTab === 'details' && (
           <>
             {/* Banner and DP Section */}
-            <div className="merchant-banner" style={{ backgroundImage: `url(${merchantData.background})` }}>
-              {isEditing && (
-                <input
-                  type="file"
-                  onChange={(e) =>
-                    handleInputChange({ target: { name: 'background', value: URL.createObjectURL(e.target.files[0]) } })
-                  }
-                />
-              )}
+            <div className="merchant-banner" style={{ backgroundImage: `url(${previewBanner || merchantData.background})` }}>
+              {isEditing && <input type="file" onChange={handleBannerChange} />}
             </div>
 
             <div className="merchant-logo">
-              <img src={merchantData.dp} alt="Merchant Logo" />
-              {isEditing && (
-                <input
-                  type="file"
-                  onChange={(e) =>
-                    handleInputChange({ target: { name: 'dp', value: URL.createObjectURL(e.target.files[0]) } })
-                  }
-                />
-              )}
+              <img src={previewDp || merchantData.dp} alt="Merchant Logo" />
+              {isEditing && <input type="file" onChange={handleDpChange} />}
             </div>
 
             {/* Merchant Details Section */}
             <div className="merchant-details-header">
               <h2>Merchant Details</h2>
               {isEditing ? (
-                <button className="save-btn" onClick={handleSaveChanges}>Save</button>
+                <button className="save-btn" onClick={handleSaveChanges}>
+                  Save
+                </button>
               ) : (
-                <button className="edit-btn" onClick={handleEditToggle}>Edit</button>
+                <button className="edit-btn" onClick={handleEditToggle}>
+                  Edit
+                </button>
               )}
             </div>
 
@@ -209,16 +259,6 @@ const MerchantDetails = () => {
                   />
                 </div>
 
-                <div className="form-group">
-                  <label>Location:</label>
-                  <input
-                    type="text"
-                    name="location"
-                    value={merchantData.location}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                  />
-                </div>
 
                 <div className="form-group">
                   <label>Phone Number:</label>
@@ -244,8 +284,8 @@ const MerchantDetails = () => {
             </div>
           </>
         )}
-        {activeTab === 'offers' && <Offers offers={offers} />}
-        {activeTab === 'content' && <Content content={content} />}
+        {activeTab === 'offers' && <Offers offers={offers} id={merchantData.id} />}
+        {activeTab === 'content' && <Content content={content} id={merchantData.id} />}
         {activeTab === 'qr' && <QRCodes storeId={merchantData.id} />}
       </div>
     </div>

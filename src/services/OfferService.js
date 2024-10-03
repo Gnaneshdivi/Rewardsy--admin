@@ -40,6 +40,16 @@ class OfferService {
       throw error;
     }
   }
+  async getOfferById(offerId) {
+    try {
+      const url = `${this.baseURL}/${offerId}`;
+      const response = await APICallHandler(url, 'GET');
+      return response;
+    } catch (error) {
+      console.error('Error fetching offer by ID:', error.message);
+      throw error;
+    }
+  }
 
   // Delete an offer (DELETE request)
   async deleteOffer(offerId, token = undefined) {

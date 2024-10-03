@@ -1,41 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './OfferDetails.css'; // Import the CSS for styling
+import { offerService } from '../../services/OfferService'; // Import Offer Service
+import StorageService, { FILE_TYPES } from '../../services/StorageService'; // Import storage service
 
 const OfferDetails = () => {
   const { id } = useParams(); // Get the offer ID from the URL parameters
   const navigate = useNavigate();
 
-  // Simulated fetched offer data (mock data)
-  const dummyData = {
-    GvQlHr9Rqn6CLPwtaWr1: {
-      active: true,
-      description: 'Buy 1 Get 1 Free on selected toys!',
-      endDate: '2024-12-31',
-      id: 'GvQlHr9Rqn6CLPwtaWrl',
-      image: 'https://picsum.photos/200/300?random=4',
-      numberOfOffers: 150,
-      redemptions: 83,
-      startDate: '2024-09-20',
-      store: 'ZkPqGf7Qin2YHLvcaWnB',
-      tags: ['Toys', 'BOGO'],
-      title: 'Toy Wonderland Offer',
-    },
-    // Add more dummy offers if needed
-  };
-
   const [offerData, setOfferData] = useState(null); // Store the offer data
   const [isEditing, setIsEditing] = useState(false); // Toggle edit mode
   const [tagInput, setTagInput] = useState(''); // For tag input
+  const [loading, setLoading] = useState(true); // For loading state
+  const [newImageFile, setNewImageFile] = useState(null); // Track if a new image is uploaded
+  const [originalOfferData, setOriginalOfferData] = useState(null); // Store original offer data for comparison
 
   // Fetch the offer data based on the ID
   useEffect(() => {
-    const fetchedOffer = dummyData[id];
-    if (fetchedOffer) {
-      setOfferData(fetchedOffer);
-    } else {
-      console.error('Offer not found');
-    }
+    const fetchOffer = async () => {
+      try {
+        const fetchedOffer = await offerService.getOfferById(id);
+        setOfferData(fetchedOffer);
+        setOriginalOfferData(fetchedOffer); // Save original data for comparison
+      } catch (error) {
+        console.error('Error fetching offer:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOffer();
   }, [id]);
 
   const handleInputChange = (e) => {
@@ -60,7 +54,9 @@ const OfferDetails = () => {
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      const newImageURL = URL.createObjectURL(e.target.files[0]);
+      const file = e.target.files[0];
+      setNewImageFile(file); // Track the new image file
+      const newImageURL = URL.createObjectURL(file);
       setOfferData((prev) => ({ ...prev, image: newImageURL }));
     }
   };
@@ -75,13 +71,59 @@ const OfferDetails = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    console.log('Offer data saved:', offerData); // Simulate saving the data
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      let updatedData = {};
+
+      // Compare and update only changed fields
+      if (offerData.title !== originalOfferData.title) {
+        updatedData.title = offerData.title;
+      }
+      if (offerData.description !== originalOfferData.description) {
+        updatedData.description = offerData.description;
+      }
+      if (offerData.startDate !== originalOfferData.startDate) {
+        updatedData.startDate = offerData.startDate;
+      }
+      if (offerData.endDate !== originalOfferData.endDate) {
+        updatedData.endDate = offerData.endDate;
+      }
+      if (JSON.stringify(offerData.tags) !== JSON.stringify(originalOfferData.tags)) {
+        updatedData.tags = offerData.tags;
+      }
+      if (offerData.active !== originalOfferData.active) {
+        updatedData.active = offerData.active;
+      }
+  
+
+      // Handle image upload if a new image was selected
+      if (newImageFile) {
+        const uploadedImageUrl = await StorageService.uploadFileToStorage(newImageFile, FILE_TYPES.CONTENT);
+        updatedData.image = uploadedImageUrl;
+      }
+
+      // If there's something to update, call the API
+      if (Object.keys(updatedData).length > 0) {
+        await offerService.updateOffer(id, updatedData);
+        setOriginalOfferData({ ...offerData, ...updatedData }); // Update original offer data
+        console.log('Offer data updated:', updatedData);
+      }
+
+      setIsEditing(false); // Exit edit mode after save
+    } catch (error) {
+      console.error('Error updating offer:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!offerData) {
+  if (loading) {
     return <p>Loading offer details...</p>; // Show a loading message while fetching
+  }
+
+  if (!offerData) {
+    return <p>Offer not found</p>; // If no offer data is found
   }
 
   return (

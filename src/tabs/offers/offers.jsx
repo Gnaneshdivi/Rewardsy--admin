@@ -1,38 +1,28 @@
-// Offers.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Offers.css'; // Import the CSS for styling
 import OfferForm from '../../Forms/OfferForm'; // Import the form component
 import CommonTable from '../../table/CommonTable'; // Import the common table component
 
-const Offers = () => {
-  const [offers, setOffers] = useState([]);
-  const [filteredOffers, setFilteredOffers] = useState([]);
+const Offers = ({ offers, id }) => { // Accept `offers` as a prop
+  const [offerList, setOfferList] = useState(offers || []); // Initialize with the passed offers data
   const [filterStatus, setFilterStatus] = useState(''); // State for filter
   const [searchQuery, setSearchQuery] = useState(''); // State for search
   const [isAddingNewOffer, setIsAddingNewOffer] = useState(false); // State to toggle form and table
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch offers from your backend API
-    const fetchedOffers = [
-      {
-        id: 'GvQlHr9Rqn6CLPwtaWr1',
-        title: 'Toy Wonderland Offer',
-        description: 'Buy 1 Get 1 Free on selected toys!',
-        startDate: '2024-09-20',
-        endDate: '2024-12-31',
-        status: 'Active',
-        store: 'ZkPqGf7Qin2YHLvcaWnB',
-      },
-      // Add more offers as needed
-    ];
-    setOffers(fetchedOffers);
-    setFilteredOffers(fetchedOffers); // Set initial filtered offers
-  }, []);
+    // Set initial filtered offers when the component mounts or offers change
+    setOfferList(offers);
+  }, [offers]);
 
   const handleAddNewOffer = () => {
     setIsAddingNewOffer(!isAddingNewOffer); // Toggle between form and table
+  };
+
+  const handleNewOfferAdded = (newOffer) => {
+    setOfferList((prevOffers) => [...prevOffers, newOffer]); // Add the new offer to the list
+    setIsAddingNewOffer(false); // Close the form after adding the offer
   };
 
   const handleFilterChange = (e) => {
@@ -48,7 +38,7 @@ const Offers = () => {
   };
 
   const filterOffers = (query, status) => {
-    let updatedOffers = [...offers];
+    let updatedOffers = [...offerList];
 
     // Filter by status
     if (status) {
@@ -62,13 +52,13 @@ const Offers = () => {
       );
     }
 
-    setFilteredOffers(updatedOffers);
+    setOfferList(updatedOffers);
   };
 
-  const handleRowClick = (id) => {
-    navigate(`/offer/${id}`); // Navigate to the offer-specific page
+  const handleRowClick = (offer) => {
+    console.log('Navigating to offer ID:', offer.id); // Make sure offer.id is being passed correctly
+    navigate(`/offer/${offer.id}`); // Navigate to the offer-specific page
   };
-
   return (
     <div className="offers-container">
       <div className="offers-header">
@@ -100,10 +90,10 @@ const Offers = () => {
       </div>
 
       {isAddingNewOffer ? (
-        <OfferForm onBack={handleAddNewOffer} />
+        <OfferForm onBack={handleAddNewOffer} storeId={id} onOfferAdded={handleNewOfferAdded} />
       ) : (
         <CommonTable
-          data={filteredOffers}
+          data={offerList}
           columns={[
             { key: 'id', label: 'Offer ID' },
             { key: 'title', label: 'Title' },
@@ -112,9 +102,9 @@ const Offers = () => {
               key: 'actions',
               label: 'Actions',
               render: (offer) => (
-                <button className="view-btn" onClick={() => handleRowClick(offer.id)}>
-                  View/Edit
-                </button>
+                <button className="view-btn" onClick={() => handleRowClick(offer)}> {/* Make sure only offer.id is passed */}
+                View/Edit
+              </button>
               ),
             },
           ]}
