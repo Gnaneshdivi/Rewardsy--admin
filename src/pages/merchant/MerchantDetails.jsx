@@ -7,6 +7,8 @@ import { merchantService } from '../../services/MerchantService'; // Assuming th
 import StorageService, { FILE_TYPES } from '../../services/StorageService'; // Import Firebase Storage service
 import { useParams } from 'react-router-dom'; // To get store ID from URL
 import Spinner from '../../Components/Spinner';
+import { offerService } from '../../services/OfferService';
+import { contentService } from '../../services/ContentService';
 
 const MerchantDetails = () => {
   const { storeId } = useParams(); // Get store ID from URL params
@@ -26,17 +28,18 @@ const MerchantDetails = () => {
     const fetchStoreDetails = async () => {
       try {
         const response = await merchantService.getStoreById(storeId); // Assuming this API call is available
-        setMerchantData(response.store);
-        setOriginalMerchantData(response.store);
-        setOffers(response.offers);
-        setContent(response.content);
+        setMerchantData(response);
+        setOriginalMerchantData(response);
+        const offers = await offerService.getOffersByStore(storeId)
+        setOffers(offers);
+        const content = await contentService.getContentByStore(storeId)
+        setContent(content);
       } catch (error) {
         console.error('Error fetching store details:', error.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchStoreDetails();
   }, [storeId]);
 
