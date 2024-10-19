@@ -50,7 +50,8 @@ class MerchantService {
   // Get all merchants (GET request)
   async getAllMerchants(start, limit) {
     try {
-      const url = this.baseURL+`?limit=${limit ?? 10}&start=${start ?? 0}`;
+      const baseUrl = this.baseURL;
+      const url = baseUrl + `?limit=${limit ?? 10}&start=${start ?? 0}`;
       const response = await APICallHandler(url, 'GET', undefined, {});
       return response;
     } catch (error) {
