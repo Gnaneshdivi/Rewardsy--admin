@@ -79,6 +79,7 @@ const SearchMerchantPage: React.FC = () => {
           dataSource={filteredMerchants}
           rowKey="id"
           pagination={{ pageSize: 10 }}
+          style={{ overflow: 'scroll' }}
         />
       </Space>
     </div>

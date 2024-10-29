@@ -8,24 +8,6 @@
   min-height: 100vh;
 }
 
-.content-layout {
-  padding: 24px;
-  background: #fff;
-  min-height: 280px;
-  border-radius: 8px;
-}
-
-/* Navigation styles */
-.logo {
-  height: 32px;
-  margin: 16px;
-  display: flex;
-  align-items: center;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-}
-
 /* Form styles */
 .merchant-form {
   max-width: 800px;
@@ -83,19 +65,4 @@
 /* Search section */
 .search-section {
   margin-bottom: 24px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .site-layout {
-    padding: 12px;
-  }
-
-  .content-layout {
-    padding: 16px;
-  }
-
-  .merchant-form {
-    padding: 0 12px;
-  }
 }

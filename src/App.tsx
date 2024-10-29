@@ -1,6 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { Layout } from 'antd';
-import Navigation from './components/layout/Navigation';
+import Navigation from './components/layout/NavigationBar/Navigation';
 import AddUpdateMerchantPage from './pages/AddUpdateMerchantPage';
 import SearchMerchantPage from './pages/SearchMerchantPage';
 import './styles/App.css';
@@ -14,14 +19,23 @@ function App() {
         <Navigation />
         <Layout className="site-layout">
           <Content className="content-layout">
-            <Routes>
-              <Route path="/merchant/search" element={<SearchMerchantPage />} />
-              <Route path="/merchant/add" element={<AddUpdateMerchantPage />} />
-              <Route
-                path="/merchant/edit/:id"
-                element={<AddUpdateMerchantPage />}
-              />
-            </Routes>
+            <div className="site-layout-background">
+              <Routes>
+                <Route
+                  path="/merchant/search"
+                  element={<SearchMerchantPage />}
+                />
+                <Route
+                  path="/merchant/add"
+                  element={<AddUpdateMerchantPage />}
+                />
+                <Route
+                  path="/merchant/edit/:id"
+                  element={<AddUpdateMerchantPage />}
+                />
+                <Route path="/*" element={<Navigate to="/merchant/search" />} />
+              </Routes>
+            </div>
           </Content>
         </Layout>
       </Layout>

@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout, Menu } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Store, Search } from 'lucide-react';
+import { MenuItemType } from 'antd/es/menu/interface';
+import NavigationLogo from './NavigationLogo';
 
 const { Sider } = Layout;
 
 const Navigation: React.FC = () => {
+  const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const menuItems = [
+  const menuItems: MenuItemType[] = [
     {
-      key: '//merchant/search',
+      key: '/merchant/search',
       icon: <Search size={16} />,
       label: 'Search Merchant',
     },
@@ -23,11 +26,13 @@ const Navigation: React.FC = () => {
   ];
 
   return (
-    <Sider breakpoint="lg" collapsedWidth="0">
-      <div className="logo">
-        <Store size={24} style={{ marginRight: '8px' }} />
-        Rewardsy
-      </div>
+    <Sider
+      breakpoint="md"
+      collapsible
+      collapsed={collapsed}
+      onCollapse={setCollapsed}
+    >
+      <NavigationLogo showText={!collapsed} />
       <Menu
         theme="dark"
         mode="inline"
