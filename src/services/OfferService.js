@@ -8,7 +8,7 @@ class OfferService {
   // Get offers by store ID (GET request)
   async getOffersByStore(storeId) {
     try {
-      const url = `${this.baseURL}/by-store/${storeId}`;
+      const url = `${this.baseURL}/admin/by-store/${storeId}`;
       const response = await APICallHandler(url, 'GET');
       return response;
     } catch (error) {
@@ -20,7 +20,7 @@ class OfferService {
   // Create a new offer (POST request)
   async createOffer(offerData, token = undefined) {
     try {
-      const url = this.baseURL;
+      const url = this.baseURL + '/admin';
       const response = await APICallHandler(url, 'POST', token, {}, offerData);
       return response;
     } catch (error) {
@@ -32,7 +32,7 @@ class OfferService {
   // Update an offer (PUT request)
   async updateOffer(offerId, offerData, token = undefined) {
     try {
-      const url = `${this.baseURL}/${offerId}`;
+      const url = `${this.baseURL}/admin/${offerId}`;
       const response = await APICallHandler(url, 'PUT', token, {}, offerData);
       return response;
     } catch (error) {
@@ -42,7 +42,7 @@ class OfferService {
   }
   async getOfferById(offerId) {
     try {
-      const url = `${this.baseURL}/${offerId}`;
+      const url = `${this.baseURL}/admin/${offerId}`;
       const response = await APICallHandler(url, 'GET');
       return response;
     } catch (error) {
@@ -54,7 +54,7 @@ class OfferService {
   // Delete an offer (DELETE request)
   async deleteOffer(offerId, token = undefined) {
     try {
-      const url = `${this.baseURL}/${offerId}`;
+      const url = `${this.baseURL}admin//${offerId}`;
       const response = await APICallHandler(url, 'DELETE', token);
       return response;
     } catch (error) {
