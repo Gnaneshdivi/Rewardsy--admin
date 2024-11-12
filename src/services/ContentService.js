@@ -8,7 +8,7 @@ class ContentService {
   // Get all content by store ID (GET request)
   async getContentByStore(storeId) {
     try {
-      const url = `${this.baseURL}/by-store/${storeId}`;
+      const url = `${this.baseURL}/admin/by-store/${storeId}`;
       const response = await APICallHandler(url, 'GET');
       return response;
     } catch (error) {
@@ -32,7 +32,7 @@ class ContentService {
   // Get content by ID (GET request) - New method
   async getContentById(contentId) {
     try {
-      const url = `${this.baseURL}/${contentId}`;
+      const url = `${this.baseURL}/admin/${contentId}`;
       const response = await APICallHandler(url, 'GET');
       return response;
     } catch (error) {

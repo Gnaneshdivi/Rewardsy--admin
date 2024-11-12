@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './ContentForm.css'; // Import CSS for styling
+import './ContentForm.css'; 
 import TagInput from '../Components/tags/TagInput'; // Import the reusable TagInput component
 import { contentService } from '../services/ContentService'; // Import contentService
 import StorageService, { FILE_TYPES } from '../services/StorageService'; // Firebase Storage Service
